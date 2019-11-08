@@ -7,11 +7,10 @@
 ** vivoka.com
 */
 
-#include <QCoreApplication>
+// Project includes
+#include "Application.hpp"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication app { argc, argv };
-
-    return app.exec();
+    return Application(argc, argv).run();
 }
