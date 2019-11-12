@@ -1,8 +1,11 @@
-QT = core
+QT = core websockets
 
 SOURCES += \
+        Game.cpp \
         main.cpp
 
-HEADERS +=
+HEADERS += \
+    Game.hpp \
+    Log.hpp
 
 include($$files(../*.pri))
