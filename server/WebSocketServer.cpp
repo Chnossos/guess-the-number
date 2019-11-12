@@ -38,11 +38,11 @@ bool WebSocketServer::start()
     auto const success = _server.listen(QHostAddress::Any, _port);
 
     if (success)
-        LOG(Info, "Server") << "Listening on *:" << _port;
+        LOG(Info, "Server", "Listening on *:") << _port;
     else
     {
-        LOG(Warning, "Server") << "Could not listen to incomming connections: "
-                               << _server.errorString();
+        LOG(Warning, "Server",
+            "Could not listen to incomming connections: ") << _server.errorString();
     }
 
     return success;

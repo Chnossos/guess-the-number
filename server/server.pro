@@ -12,7 +12,6 @@ HEADERS += \
     Client.hpp \
     Game.hpp \
     Log.hpp \
-    Rules.hpp \
     WebSocketServer.hpp
 
 include($$files(../*.pri))

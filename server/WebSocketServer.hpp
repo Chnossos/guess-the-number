@@ -10,7 +10,7 @@
 #pragma once
 
 // Project includes
-#include "Rules.hpp"
+#include <common/Rules.hpp>
 
 // Qt includes
 #include <QWebSocketServer>

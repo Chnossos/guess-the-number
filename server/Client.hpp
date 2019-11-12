@@ -29,10 +29,14 @@ private:
 public:
     Client(unsigned int id, WebSocketPtr && socket);
 
+public:
+    void send(QString const & header, QJsonObject packet);
+
 signals:
     void errorOccured();
     void packetReceived(QJsonObject const & packet);
 
 private slots:
+    void onSocketDisconnected();
     void onMessageReceived(QByteArray const & message);
 };

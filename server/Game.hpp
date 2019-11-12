@@ -11,7 +11,8 @@
 
 // Project includes
 #include "Client.hpp"
-#include "Rules.hpp"
+
+#include <common/Rules.hpp>
 
 // Qt includes
 #include <QObject>
@@ -24,6 +25,9 @@ private:
     unsigned int const _id;
     Client             _client;
     Rules const &      _rules;
+    QString            _name;
+    int                _number;
+    int                _attemptsLeft;
 
 public:
     Game(unsigned int id, WebSocketPtr && socket,
@@ -34,4 +38,9 @@ signals:
 
 private slots:
     void onPacketReceived(QJsonObject const & packet);
+
+private:
+    void (Game::*handlePacket)(QJsonObject const & packet);
+    void handleIdentityPacket(QJsonObject const & packet);
+    void handleGuessPacket(QJsonObject const & packet);
 };

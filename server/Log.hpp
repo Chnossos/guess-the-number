@@ -12,5 +12,6 @@
 // Qt includes
 #include <QDebug>
 
-#define LOG(level, id) \
-    q ## level().noquote().nospace() << QString("[%1] ").arg(id, 6)
+#define LOG(level, id, message)      \
+    q ## level().noquote().nospace() \
+        << QString("[%1][%2] ").arg(id, 6).arg(#level, 8) << QString(message)
