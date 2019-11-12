@@ -10,3 +10,5 @@ linux-g++: QMAKE_CXXFLAGS = \
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+
+INCLUDEPATH += $$ROOT
