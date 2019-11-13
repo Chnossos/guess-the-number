@@ -103,7 +103,7 @@ void Game::handleGuessPacket(QJsonObject const & packet)
             --_attemptsLeft;
 
         int const guess = packet[CP::guess].toInt();
-        if (guess > _number)
+        /**/ if (guess > _number)
             _client.send(CP::answer, {{ CP::answer, CP::lower  }});
         else if (guess < _number)
             _client.send(CP::answer, {{ CP::answer, CP::higher }});

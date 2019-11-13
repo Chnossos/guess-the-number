@@ -132,9 +132,9 @@ void Game::onAnswerPacketReceived(QJsonObject const & packet)
 
     auto const answer = packet[CP::answer].toString();
     /**/ if (answer == CP::lower)
-        LOG(Info, "Server says: you guessed too high!");
+        LOG(Warning, "Server says: you guessed too high!");
     else if (answer == CP::higher)
-        LOG(Info, "Server says: you guessed too low!");
+        LOG(Warning, "Server says: you guessed too low!");
     else
     {
         LOG(Info, "Server says: you won!");
@@ -172,7 +172,7 @@ void Game::guess()
         if (_rules->maxAttempts == -1)
             cout << prompt.arg("unlimited") << flush;
         else
-            cout << prompt.arg(_rules->maxAttempts) << flush;
+            cout << prompt.arg(_attemptsLeft) << flush;
 
         number = cin.readLine().toInt(&ok);
     }
