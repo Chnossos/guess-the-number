@@ -29,6 +29,7 @@ namespace Constants
         KEY(score);
 
         KEY_VALUE(elapsedTime, "elapsed_time");
+        KEY_VALUE(gameOver,    "game_over");
         KEY_VALUE(equals,      "=");
         KEY_VALUE(higher,      "+");
         KEY_VALUE(lower,       "-");

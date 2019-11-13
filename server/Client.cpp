@@ -18,6 +18,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+namespace CP = Constants::Packet;
+
 Client::Client(unsigned int id, WebSocketPtr && socket)
     : _id     { id                                 }
     , _socket { std::forward<WebSocketPtr>(socket) }
@@ -32,20 +34,27 @@ Client::Client(unsigned int id, WebSocketPtr && socket)
                      this,          &Client::onMessageReceived);
     QObject::connect(_socket.get(), &QWebSocket::textMessageReceived,
         [this] (QString const & str) { onMessageReceived(str.toUtf8()); });
-
-
 }
 
 void Client::send(QString const & header, QJsonObject packet)
 {
-    packet.insert(Constants::Packet::header, header);
-    _socket->sendBinaryMessage(QJsonDocument(packet).toJson());
-    LOG(Info, _id, "Sent packet '%1'").arg(header);
+    packet.insert(CP::header, header);
+
+    QJsonDocument const doc { packet };
+
+    auto const size = _socket->sendBinaryMessage(doc.toJson());
+    LOG(Info, _id, "Sent: '%1' (%2 bytes):\n%3")
+        .arg(header).arg(size)
+        .arg(QString(doc.toJson(QJsonDocument::Indented)).replace(QRegExp("\n$"), ""));
 }
 
 void Client::onSocketDisconnected()
 {
-    LOG(Warning, _id, "Player has left the game (%1)").arg(_socket->closeReason());
+    auto const closeReason = _socket->closeReason();
+    if (closeReason.isEmpty())
+        LOG(Warning, _id, "Player has left the game");
+    else
+        LOG(Warning, _id, "Player has left the game (%1)").arg(closeReason);
 }
 
 void Client::onMessageReceived(QByteArray const & message)
@@ -55,9 +64,17 @@ void Client::onMessageReceived(QByteArray const & message)
 
     if (document.isNull())
     {
-        LOG(Critical, _id, "Failed to parse message: %1").arg(error.errorString());
+        LOG(Critical, _id, "Failed to parse message: ") << error.errorString();
         emit errorOccured(); // Terminate the session
     }
     else
-        emit packetReceived(document.object());
+    {
+        auto const packet = document.object();
+
+        LOG(Info, _id, "Recv: '%1' (%2 bytes):\n%3")
+            .arg(packet[CP::header].toString()).arg(message.size())
+            .arg(QString(document.toJson(QJsonDocument::Indented)));
+
+        emit packetReceived(packet);
+    }
 }

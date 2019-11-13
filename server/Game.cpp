@@ -20,8 +20,6 @@
 // C++ includes
 #include <random>
 
-#include <QJsonDocument>
-
 namespace CP = Constants::Packet;
 
 namespace
@@ -58,9 +56,6 @@ Game::Game(unsigned int id, WebSocketPtr && socket,
 
 void Game::onPacketReceived(QJsonObject const & packet)
 {
-    LOG(Info, _id, "Received packet '%1':\n%2").arg(packet[CP::header].toString())
-        .arg(QString(QJsonDocument(packet).toJson(QJsonDocument::Indented)));
-
     (this->*handlePacket)(packet);
 }
 
@@ -99,9 +94,6 @@ void Game::handleGuessPacket(QJsonObject const & packet)
     }
     else
     {
-        if (_attemptsLeft != -1)
-            --_attemptsLeft;
-
         int const guess = packet[CP::guess].toInt();
         /**/ if (guess > _number)
             _client.send(CP::answer, {{ CP::answer, CP::lower  }});
@@ -110,12 +102,15 @@ void Game::handleGuessPacket(QJsonObject const & packet)
         else
             _client.send(CP::answer, {{ CP::answer, CP::equals }});
 
-        if (guess != _number) return;
+        if (guess != _number)
+        {
+            if (_attemptsLeft != -1 && --_attemptsLeft == 0)
+                _client.send(CP::gameOver);
+            else
+                return;
+        }
+
         // TODO: Save score if not anonymous (always anonymous in auto-mode)
-//        if (guess == _number && !_name.isEmpty())
-//            saveScore(_name, _number, _attemptsLeft);
-//        else
-//            return;
     }
     emit finished();
 }

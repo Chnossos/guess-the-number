@@ -87,14 +87,16 @@ void Game::onMessageReceived(QByteArray const & message)
     if (document.isNull())
     {
         LOG(Critical, "Failed to parse message: ") << error.errorString();
-        _socket.abort();
+        return _socket.abort();
     }
-    else
-    {
-        LOG(Info, "Message received (%1 byte(s)):\n%2").arg(message.size())
-            .arg(QString(document.toJson(QJsonDocument::Indented)));
-        (this->*onPacketReceived)(document.object());
-    }
+
+    auto const packet = document.object();
+
+    LOG(Info, "Recv: '%1' (%2 byte(s)):\n%3")
+        .arg(packet[CP::header].toString()).arg(message.size())
+        .arg(QString(document.toJson(QJsonDocument::Indented)));
+
+    (this->*onPacketReceived)(packet);
 }
 
 void Game::onRulesPacketReceived(QJsonObject const & packet)
@@ -123,10 +125,17 @@ void Game::onRulesPacketReceived(QJsonObject const & packet)
 void Game::onAnswerPacketReceived(QJsonObject const & packet)
 {
     auto const header = packet[CP::header].toString();
-    if (header != CP::answer)
+    if (header != CP::answer && header != CP::gameOver)
     {
         LOG(Critical, "Packet '%1' was unexpected.").arg(header);
         _socket.abort();
+        return;
+    }
+
+    if (header == CP::gameOver)
+    {
+        LOG(Info, "Server says: you lost!");
+//        onPacketReceived = &Game::onScorePacketReceived;
         return;
     }
 
@@ -151,10 +160,12 @@ void Game::send(QJsonObject const & message)
     if (_socket.state() != QAbstractSocket::ConnectedState)
         return;
 
-    LOG(Info, "Sending packet '%1'")
-        .arg(message[Constants::Packet::header].toString());
+    QJsonDocument const doc { message };
 
-    _socket.sendBinaryMessage(QJsonDocument(message).toJson());
+    auto const size = _socket.sendBinaryMessage(doc.toJson());
+    LOG(Info, "Sent: '%1' (%2 bytes):\n%3")
+        .arg(message[CP::header].toString()).arg(size)
+        .arg(QString(doc.toJson(QJsonDocument::Indented)));
 }
 
 void Game::guess()

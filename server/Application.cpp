@@ -20,7 +20,7 @@ Application::Application(int & argc, char *argv[])
 
 auto Application::run() -> decltype(exec())
 {
-    Rules const rules { 1, 100, -1 }; // TODO: init from CmdLineParser
+    Rules const rules { 1, 100, 10 }; // TODO: init from CmdLineParser
 
     WebSocketServer server { 4242, rules };
     return server.start() ? exec() : EXIT_FAILURE;

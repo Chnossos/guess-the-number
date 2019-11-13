@@ -30,7 +30,7 @@ public:
     Client(unsigned int id, WebSocketPtr && socket);
 
 public:
-    void send(QString const & header, QJsonObject packet);
+    void send(QString const & header, QJsonObject packet = {});
 
 signals:
     void errorOccured();
