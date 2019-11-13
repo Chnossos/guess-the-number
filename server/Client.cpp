@@ -13,6 +13,7 @@
 #include "Log.hpp"
 
 #include <common/Constants.hpp>
+#include <common/Json.hpp>
 
 // Qt includes
 #include <QJsonDocument>
@@ -44,8 +45,7 @@ void Client::send(QString const & header, QJsonObject packet)
 
     auto const size = _socket->sendBinaryMessage(doc.toJson());
     LOG(Info, _id, "Sent: '%1' (%2 bytes):\n%3")
-        .arg(header).arg(size)
-        .arg(QString(doc.toJson(QJsonDocument::Indented)).replace(QRegExp("\n$"), ""));
+        .arg(header).arg(size).arg(Json::prettify(doc));
 }
 
 void Client::onSocketDisconnected()
@@ -72,8 +72,9 @@ void Client::onMessageReceived(QByteArray const & message)
         auto const packet = document.object();
 
         LOG(Info, _id, "Recv: '%1' (%2 bytes):\n%3")
-            .arg(packet[CP::header].toString()).arg(message.size())
-            .arg(QString(document.toJson(QJsonDocument::Indented)));
+            .arg(packet[CP::header].toString())
+            .arg(message.size())
+            .arg(Json::prettify(document));
 
         emit packetReceived(packet);
     }

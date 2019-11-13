@@ -13,9 +13,7 @@
 #include "Log.hpp"
 
 #include <common/Constants.hpp>
-
-// Qt includes
-#include <QJsonDocument>
+#include <common/Json.hpp>
 
 // Convenience macro
 #define SEND(packetHeader, ...) \
@@ -94,7 +92,7 @@ void Game::onMessageReceived(QByteArray const & message)
 
     LOG(Info, "Recv: '%1' (%2 byte(s)):\n%3")
         .arg(packet[CP::header].toString()).arg(message.size())
-        .arg(QString(document.toJson(QJsonDocument::Indented)));
+        .arg(Json::prettify(document));
 
     (this->*onPacketReceived)(packet);
 }
@@ -164,8 +162,7 @@ void Game::send(QJsonObject const & message)
 
     auto const size = _socket.sendBinaryMessage(doc.toJson());
     LOG(Info, "Sent: '%1' (%2 bytes):\n%3")
-        .arg(message[CP::header].toString()).arg(size)
-        .arg(QString(doc.toJson(QJsonDocument::Indented)));
+        .arg(message[CP::header].toString()).arg(size).arg(Json::prettify(doc));
 }
 
 void Game::guess()
