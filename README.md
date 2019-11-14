@@ -19,22 +19,22 @@ Réalisez 2 programmes console, client et serveur, à l'aide du [framework Qt][1
 
 ### Options de démarrage (toutes sont optionnelles)
 
-| Option        | Type   | Défaut      | Description                                          |
-| ------------- | :----: | :---------: | ---------------------------------------------------- |
-| `-h` `--host` | String | `localhost` | Host name du serveur à contacter                     |
-| `-p` `--port` | Nombre | `4242`      | Port sur lequel se connecter                         |
-| `-a` `--auto` |        |             | Trouve le nombre aléatoire à la place de l'humain    |
-| `-n` `--name` |        |             | Identité du client (désactivée si `--auto` utilisée) |
+| Option        | Type   | Défaut      | Description                                           |
+| ------------- | :----: | :---------: | ----------------------------------------------------- |
+| `-h` `--host` | String | `localhost` | Host name du serveur à contacter.                     |
+| `-p` `--port` | Nombre | `4242`      | Port sur lequel se connecter.                         |
+| `-n` `--name` | String |             | Identité du client (désactivée si `--auto` utilisée). |
+| `-a` `--auto` |        |             | Trouve le nombre aléatoire à la place de l'humain.    |
 
 ## Serveur
 
 ### Options de démarrage (toutes sont optionnelles)
 
-| Option          | Type   | Défaut   | Description                                              |
-| --------------- | :----: | :------: | -------------------------------------------------------- |
-| `-p` `--port`   | Nombre | `4242`   | Port sur lequel attendre les clients                     |
-| `-l` `--limit`  | Nombre |          | Limite de tentatives par partie                          |
-| `-b` `--bounds` | String | `1,100`  | Bornes de l'interval (entiers _signés_, X et Y _inclus_) |
+| Option          | Type   | Défaut   | Description                                               |
+| --------------- | :----: | :------: | --------------------------------------------------------- |
+| `-p` `--port`   | Nombre | `4242`   | Port sur lequel attendre les clients.                     |
+| `-l` `--limit`  | Nombre | `-1`     | Limite de tentatives par partie (`-1` pour illimitées).   |
+| `-b` `--bounds` | String | `1,100`  | Bornes de l'interval (entiers _signés_, X et Y _inclus_). |
 
 - À chaque tentative du client, le serveur indique si le nombre a trouver est supérieur ou inférieur au nombre tenté, ou si une erreur s'est produite.
 
