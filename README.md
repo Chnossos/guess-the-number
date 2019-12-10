@@ -34,7 +34,7 @@ Réalisez 2 programmes console, client et serveur, à l'aide du [framework Qt][1
 | --------------- | :----: | :------: | --------------------------------------------------------- |
 | `-p` `--port`   | Nombre | `4242`   | Port sur lequel attendre les clients.                     |
 | `-l` `--limit`  | Nombre | `-1`     | Limite de tentatives par partie (`-1` pour illimitées).   |
-| `-b` `--bounds` | String | `1,100`  | Bornes de l'interval (entiers _signés_, X et Y _inclus_). |
+| `-b` `--bounds` | String | `1,100`  | Bornes de l'intervalle (entiers _signés_, X et Y _inclus_). |
 
 - À chaque tentative du client, le serveur indique si le nombre a trouver est supérieur ou inférieur au nombre tenté, ou si une erreur s'est produite.
 
@@ -49,14 +49,14 @@ Réalisez 2 programmes console, client et serveur, à l'aide du [framework Qt][1
 
 - Le serveur doit transmettre en fin de partie les 5 meilleurs scores du joueur s'il est humain et non anonyme.
 
-## Critères d'évalution
+## Critères d'évaluation
 
 Seront évalués les critères suivants :
 
 - Capacité du serveur à gérer plusieurs clients en parallèle
 - Gestion des différentes erreurs classiques (serveur introuvable, connexion perdue, format invalide, ...)
 - Propreté, lisibilité et cohérence du code et de son style
-- Qualité du design de l'architecture du code
+- Qualité du design et de l'architecture du code
 - Capacité à proposer à l'utilisateur final une expérience agréable
 
 [1]: https://doc.qt.io/qt-5/reference-overview.html
